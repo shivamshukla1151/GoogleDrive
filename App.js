@@ -31,7 +31,7 @@ const uploadFile = async () => {
   try {
     const response = await drive.files.create({
       requestBody: {
-        name: "uploaded content",
+        name: "new",
         mimeType: "image/png",
       },
       media: {
@@ -62,7 +62,30 @@ const deleteF = async () => {
 };
 
 // deleteF();
-let port = 7800;
+
+const list = async () => {
+  const response = await drive.files.list({
+    pageSize: 15,
+    fields: "nextPageToken, files(id, name)",
+  });
+
+  const fils = response.data.files;
+  if (fils.length === 0) {
+    console.log("No files found");
+    return;
+  }
+
+  console.log("Fils:  ");
+
+  fils.map((file) => {
+    console.log(`${file.name} (${file.id})`);
+  });
+};
+
+list();
+// authorize().then(listFiles).catch(console.error);
+
+let port = 2200;
 
 app.get("/", (req, res) => {
   res.send("<h1>Hello from Nodemon!!!!</h1>");
